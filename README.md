@@ -2,6 +2,7 @@ TapClockInfo
 ==============
 Tweak for iPhone/iPod/iPad that displays device info (IPs,RAM,Respring option)
 when you tap the clock at the lockscreen.
+
 -------------------------------
 
 by Elias Limneos
