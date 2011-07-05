@@ -1,0 +1,9 @@
+Package: net.limneos.tapclockinfo
+Name: TapClockInfo
+Depends: mobilesubstrate, firmware (>=4.0)
+Version: 0.1
+Architecture: iphoneos-arm
+Description: Tap lockscreen's clock to display info
+Maintainer: Elias Limneos
+Author: Elias Limneos
+Section: Tweaks
