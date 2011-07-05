@@ -1,6 +1,4 @@
-#import <SBAwayController.h>
-#import <SBAwayDateView.h>
-#import <SpringBoard-Class.h>
+#import <SpringBoard/SpringBoard.h>
 #import <mach/mach.h>
 #import <mach/mach_host.h>
 #include <ifaddrs.h>
