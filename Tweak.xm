@@ -4,6 +4,8 @@
 #import <Foundation/NSHost.h>
 #import <mach/mach.h>
 #import <mach/mach_host.h>
+#include <ifaddrs.h>
+#include <arpa/inet.h>
 
 static NSMutableArray *infoArray=nil;
 static unsigned currentObjectIndex=-1;
@@ -29,6 +31,30 @@ natural_t get_free_memory() {
 	return mem_free;
 }
 
+static NSMutableArray * fetchIPs(){
+  
+	NSMutableArray *ipsArray=[NSMutableArray array];
+	NSString *address = @"error";
+	struct ifaddrs *interfaces = NULL;
+	struct ifaddrs *temp_addr = NULL;
+	int success = 0;
+	success = getifaddrs(&interfaces);
+	if (success == 0) {
+		temp_addr = interfaces;
+		while(temp_addr != NULL){
+			if(temp_addr->ifa_addr->sa_family == AF_INET){
+				address = [NSString stringWithUTF8String:inet_ntoa(((struct sockaddr_in *)temp_addr->ifa_addr)->sin_addr)];
+				[ipsArray addObject:address];
+			}
+			temp_addr = temp_addr->ifa_next;
+		}
+	}
+
+  freeifaddrs(interfaces);
+
+  return ipsArray;
+}
+
 %hook SBAwayDateView
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
 	%orig;
@@ -40,8 +66,7 @@ natural_t get_free_memory() {
 	[titleLabel setMinimumFontSize:9];
 	if (!infoArray){
 		infoArray=[[NSMutableArray array] retain];
-		NSHost *host=[NSHost currentHost];
-		for (NSString *address in [host addresses]){
+		for (NSString *address in fetchIPs()){
 			NSRange range=[address rangeOfString:@":"];
 			if (range.location==NSNotFound && ![address isEqual:@"127.0.0.1"])
 				[infoArray addObject:address];
